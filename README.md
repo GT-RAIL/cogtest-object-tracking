@@ -24,6 +24,6 @@ Optional adjustments:
 2. In **sidePanel.js**, you can change the side panel contents at the various game stages (introduction, observation, response, end game), or add more logging at those points.
 
 
-### Demonstration Image/Video ###
+### Demonstration Image ###
 
 ![Demonstration image](img/ot_test_demo_image.png)
