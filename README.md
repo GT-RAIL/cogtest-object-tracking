@@ -20,7 +20,7 @@ Recommended adjustments:
 4. In **utility.js**, you can change the logging function to whatever suits your needs. We used POST requests to our webserver. You may want to go through the JS files if you change the logging format.
 
 Optional adjustments:
-1. In **Ball.js**, you can change the node (square/triangle) height and stroke width in Ball.constructor(), and the ball speed in Ball.initSpeed().
+1. In **Ball.js**, you can change the ball height and outline width in Ball.constructor(), and the ball speed in Ball.initSpeed().
 2. In **sidePanel.js**, you can change the side panel contents at the various game stages (introduction, observation, response, end game), or add more logging at those points.
 
 
