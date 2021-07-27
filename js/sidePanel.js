@@ -14,7 +14,7 @@ function sidePanelIntroduction() {
 
     document.getElementById("SidePanel").style.backgroundColor = "#E8E8E8";
 
-    var text1 = document.createElement("div"); text1.innerHTML = "<br>Welcome! In this game you will be tracking balls as they move across the stage.";
+    var text1 = document.createElement("div"); text1.innerHTML = "<br>Welcome! In this game you will be tracking balls as they move across the stage. You will play " + targetSteps.length + " levels of increasing difficulty. Do your best!";
     var text2 = document.createElement("div"); text2.innerHTML = "<br>Click \"Next\" to continue.";
     var text3 = document.createElement("div"); text3.innerHTML = "";
     var text4 = document.createElement("div"); text4.innerHTML = "";
@@ -162,17 +162,18 @@ function sidePanelEndGame(score) {
     var text2 = document.createElement("div"); text2.innerHTML = "<br>You will now be redirected to the experiment portal.";
 
     // after 5 seconds, redirect the user to the experiment portal
-    window.setTimeout(() => {
-        window.location.href = "portal?pageFrom=1&success=1&workerId=" + workerId + "&mission=" + mission;
-    }, 5000);
+    //window.setTimeout(() => {
+    //    window.location.href = "portal?pageFrom=1&success=1&workerId=" + workerId + "&mission=" + mission;
+    //}, 5000);
 
     content.appendChild(text1);
     content.appendChild(text2);
 
-    if (networks.showScore){
-        var text3 = document.createElement("div"); text3.innerHTML = "<br>Score: " + score;
+    if (showScore){
+        var text3 = document.createElement("div"); text3.innerHTML = "<br>Score (correct ball, per round): " + gameboard.scores;
         content.appendChild(text3);
     }
+    log({"stage": "object tracking", "result": gameboard.scores})
 
     document.getElementById("object tracking next-button").style.display = "none";   
 }

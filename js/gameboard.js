@@ -13,6 +13,8 @@ class Gameboard {
 
         this.scores = [];
 
+        this.debugLines = false;
+
         this.freezeTimer = 20;
         this.numSelected = 0;
 
@@ -27,7 +29,7 @@ class Gameboard {
                 score += 1;
             }
         }
-        log({"stage": "object tracking", "action": "scoring", "object": "numBalls " + this.numBalls + " tracked " + this.tracking + " score " + score});
+        log({"stage": "object tracking", "action": "scoring", "numBalls": this.numBalls, "tracked": this.tracking, "score": score});
         this.scores.push(score);
     }
 
@@ -57,8 +59,18 @@ class Gameboard {
 
         // generate the balls
         for (let i = 0; i < numBalls; i++) {
-            this.balls.push(new Ball(width * (i + .5) / numBalls, height / 2));
+            let angle = i * 2 * Math.PI / numBalls
+            this.balls.push(new Ball(width/2 + .3 * width * Math.cos(angle), height/2 + .3 * height * Math.sin(angle)));
             this.balls[i].index = i;
+            this.balls[i].speedSetting = ballSpeed;  // set the speed constant
+            this.balls[i].initSpeed();  // calculates the resulting speed
+            /*let forcedAngle = 0;  // for when you want to force angles between the balls
+            if (i == 0) {
+                this.balls[i].angle = forcedAngle;
+            }
+            if (i == 1) {
+                this.balls[i].angle = Math.PI - forcedAngle;
+            }*/
         }
 
         let usedIndexes = [];

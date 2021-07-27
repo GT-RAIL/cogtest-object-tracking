@@ -11,6 +11,7 @@ class Ball {
 
         this.color = "red";
 
+        this.speedSetting = 0.08; // the speed constant
         this.speed = undefined;
         this.initSpeed();
 
@@ -29,7 +30,7 @@ class Ball {
     }
 
     initSpeed() {
-        this.speed = .08 * Math.sqrt(Math.pow(stage.width, 2) + Math.pow(stage.height, 2));
+        this.speed = .12 * Math.sqrt(Math.pow(stage.width, 2) + Math.pow(stage.height, 2));
         return
     }
 
@@ -50,8 +51,7 @@ class Ball {
         gameboard.context.stroke(circle);
 
         // debug lines
-        /*
-        if (this.index == 0) {
+        if (gameboard.debugLines && (this.index == 0 || this.index == 1)) {
             // draw a direction line
             gameboard.context.beginPath();
             gameboard.context.strokeStyle = "black";
@@ -87,14 +87,16 @@ class Ball {
             // difference between angles
             let angleDiff = combinedAngle - this.angle;
             // determine the bounce
-            let newAngle = combinedAngle + angleDiff + Math.PI;
+            let newAngle = (combinedAngle + angleDiff + Math.PI) % (2 * Math.PI);
             gameboard.context.beginPath();
             gameboard.context.strokeStyle = "cyan";
             gameboard.context.moveTo(this.x, this.y);
             gameboard.context.lineTo(this.x + 100 * Math.cos(newAngle), this.y + 100 * Math.sin(newAngle));
             gameboard.context.stroke();
+            if (this.index == 0) {
+                console.log(this.index, ">>>>>>", newAngle);
+            }
         }
-        */
 
     }
 
@@ -112,38 +114,39 @@ class Ball {
 
             // check collision with another ball
             if (distance([this.x, this.y], [gameboard.balls[i].x, gameboard.balls[i].y]) <= this.height) {
-                this.calcAngle(gameboard.balls[i].x, gameboard.balls[i].y);
-                //gameboard.balls[i].calcAngle(this.x, this.y);
+                this.calcAngle(gameboard.balls[i].x, gameboard.balls[i].y, gameboard.balls[i].angle);
+                gameboard.balls[i].calcAngle(this.x, this.y);
                 this.printed = true;
 
                 let combinedAngle = Math.atan2(this.y - gameboard.balls[i].y, this.x - gameboard.balls[i].x);
-                this.x = gameboard.balls[i].x + gameboard.balls[i].height * Math.cos(combinedAngle)
-                this.y = gameboard.balls[i].y + gameboard.balls[i].height * Math.sin(combinedAngle)
+                this.x = gameboard.balls[i].x + (gameboard.balls[i].height + 2) * Math.cos(combinedAngle) 
+                this.y = gameboard.balls[i].y + (gameboard.balls[i].height + 2) * Math.sin(combinedAngle)
+
             }
         }
 
         // check if at bounds
         // top wall
         if (distance([this.x, this.y], [this.x, 0]) <= this.height / 2) {
-            this.calcAngle(this.x, 0);
+            this.calcAngle(this.x, 0, -Math.PI/2);
             this.y = this.height / 2;
         }
 
         // bottom wall
         if (distance([this.x, this.y], [this.x, stage.height]) <= this.height / 2) {
-            this.calcAngle(this.x, stage.height);
+            this.calcAngle(this.x, stage.height, Math.PI/2);
             this.y = stage.height - this.height / 2;
         }
 
         // left wall
         if (distance([this.x, this.y], [0, this.y]) <= this.height / 2) {
-            this.calcAngle(0, this.y);
+            this.calcAngle(0, this.y, 0);
             this.x = this.height / 2;
         }
 
         // right wall
         if (distance([this.x, this.y], [stage.width, this.y]) <= this.height / 2) {
-            this.calcAngle(stage.width, this.y);
+            this.calcAngle(stage.width, this.y, Math.PI);
             this.x = stage.width - this.height / 2;
         }
 
@@ -157,7 +160,14 @@ class Ball {
     }
 
     // calculate the new angle from the collision
-    calcAngle(otherX, otherY) {
+    calcAngle(otherX, otherY, otherAngle) {
+        if (Math.abs(this.angle - otherAngle) < 2 * Math.PI){
+            console.log("collision facing", Math.abs(this.angle - otherAngle));
+        }
+        else {
+            console.log("collision reverse");
+        }
+
         // angle between balls
         let combinedAngle = Math.atan2(this.y - otherY, this.x - otherX);
 
@@ -174,15 +184,11 @@ class Ball {
         let angleDiff = combinedAngle - this.angle;
 
         // determine the bounce
-        let newAngle = combinedAngle + angleDiff + Math.PI;
-
-        if (newAngle >= 2 * Math.PI) {
-            newAngle -= 2 * Math.PI;
-        }
+        let newAngle = (combinedAngle + angleDiff + Math.PI) % (2 * Math.PI);
 
         // determine whether to add 180 to the angle
         angleDiff = getAngleDiff(newAngle, combinedAngle);
-
+        
         this.angle = newAngle;
     }
 }

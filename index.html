@@ -59,8 +59,10 @@
 
     <script>
       // SET THESE PARAMETERS TO YOUR NEEDS //
-      var numBalls = 10;  // SET THIS the number of balls in the gameboard
-      var targetSteps = [1, 2, 4, 6, 7];  // SET THIS how many target balls are chosen for the user to track, in each round
+      var numBalls = 15;  // SET THIS the number of balls in the gameboard
+      var targetSteps = [1, 2, 3, 4, 5, 6, 7];  // SET THIS how many target balls are chosen for the user to track, in each round
+      var ballSpeed = .08;
+      var showScore = true;  // SET THIS if the user should see their score
       ////////////////////////////////////////
 
       // log that this page is active
@@ -77,7 +79,8 @@
     
       // initialize the gameboard
       var gameboard = new Gameboard(stage, context);
-
+      gameboard.debugLines = false;  // whether to show debug lines between two balls
+      
       // intialize the side panel to the introduction
       sidePanelIntroduction();
 
